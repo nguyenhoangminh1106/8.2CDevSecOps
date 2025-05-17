@@ -37,12 +37,13 @@ pipeline {
         }
 
         stage('SonarCloud Analysis') {
+            environment {
+                scannerHome = tool 'SonarScanner';
+            }
             steps {
-                withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-                    script {
-                        
-                    }
-                }
+              withSonarQubeEnv(credentialsId: 'SONAR_TOKEN', installationName: 'SonarCloud') {
+                sh "${scannerHome}/bin/sonar-scanner"
+              }
             }
         }
     }
