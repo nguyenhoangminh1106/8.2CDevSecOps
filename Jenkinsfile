@@ -42,7 +42,7 @@ pipeline {
             }
             steps {
               withSonarQubeEnv(credentialsId: 'SONAR_TOKEN', installationName: 'SonarCloud') {
-                sh "${scannerHome}/bin/sonar-scanner"
+                bat "${scannerHome}\\bin\\sonar-scanner.bat"
               }
             }
         }
