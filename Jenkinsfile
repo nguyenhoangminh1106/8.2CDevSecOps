@@ -6,7 +6,7 @@ pipeline {
     }
 
     tools {
-        sonarScanner 'SonarScanner'  // Use the globally configured SonarScanner
+        sonarQube 'SonarScanner'  // Use the globally configured SonarQube Scanner
     }
 
     stages {
