@@ -39,20 +39,22 @@ pipeline {
         stage('SonarCloud Analysis') {
             steps {
                 withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-                    // Set the SonarScanner version
-                    def sonarScannerVersion = "sonar-scanner-cli-5.2.2.61219-windows"
-    
-                    // Download the SonarScanner
-                    bat """
-                    curl -L -o ${sonarScannerVersion}.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/${sonarScannerVersion}.zip
-                    powershell -command "\$ProgressPreference = 'SilentlyContinue'; Expand-Archive -Force .\\${sonarScannerVersion}.zip -DestinationPath .\\${sonarScannerVersion}"
-                    del ${sonarScannerVersion}.zip
-                    """
-    
-                    // Run the SonarScanner
-                    bat """
-                    .\\${sonarScannerVersion}\\bin\\sonar-scanner.bat -Dsonar.login=%SONAR_TOKEN%
-                    """
+                     script {
+                        // Set the SonarScanner version
+                        def sonarScannerVersion = "sonar-scanner-cli-5.2.2.61219-windows"
+        
+                        // Download the SonarScanner
+                        bat """
+                        curl -L -o ${sonarScannerVersion}.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/${sonarScannerVersion}.zip
+                        powershell -command "\$ProgressPreference = 'SilentlyContinue'; Expand-Archive -Force .\\${sonarScannerVersion}.zip -DestinationPath .\\${sonarScannerVersion}"
+                        del ${sonarScannerVersion}.zip
+                        """
+        
+                        // Run the SonarScanner
+                        bat """
+                        .\\${sonarScannerVersion}\\bin\\sonar-scanner.bat -Dsonar.login=%SONAR_TOKEN%
+                        """
+                    }
                 }
             }
         }
