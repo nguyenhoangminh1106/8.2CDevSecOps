@@ -40,21 +40,7 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
                     script {
-                        def sonarScannerVersion = "sonar-scanner-cli-5.2.2.61219-windows"
-        
-                        // Download and extract SonarScanner if not already present
-                        bat """
-                        if not exist .\\${sonarScannerVersion} (
-                            curl -L -o ${sonarScannerVersion}.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/${sonarScannerVersion}.zip
-                            powershell -command "\$ProgressPreference = 'SilentlyContinue'; Expand-Archive -Force .\\${sonarScannerVersion}.zip -DestinationPath .\\${sonarScannerVersion}"
-                            del ${sonarScannerVersion}.zip
-                        )
-                        """
-        
-                        // Run the SonarScanner using the properties file
-                        bat """
-                        .\\${sonarScannerVersion}\\bin\\sonar-scanner.bat -Dsonar.login=%SONAR_TOKEN%
-                        """
+                        
                     }
                 }
             }
