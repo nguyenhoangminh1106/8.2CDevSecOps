@@ -4,11 +4,7 @@ pipeline {
     environment {
         SONAR_TOKEN = credentials('SONAR_TOKEN')
     }
-
-    tools {
-        sonarQube 'SonarScanner'  // Use the globally configured SonarQube Scanner
-    }
-
+    
     stages {
         stage('Checkout') {
             steps {
