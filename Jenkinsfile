@@ -8,31 +8,31 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/your_github_username/8.2CDevSecOps.git'
+                bat 'git clone https://github.com/nguyenhoangminh1106/8.2CDevSecOps.git .'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                bat 'npm install'
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'npm test || true' // Allows pipeline to continue despite test failures
+                bat 'npm test || exit /b 0' // Allows pipeline to continue despite test failures
             }
         }
 
         stage('Generate Coverage Report') {
             steps {
-                sh 'npm run coverage || true' // Ensure coverage report exists
+                bat 'npm run coverage || exit /b 0' // Ensure coverage report exists
             }
         }
 
         stage('NPM Audit (Security Scan)') {
             steps {
-                sh 'npm audit || true' // This will show known CVEs in the output
+                bat 'npm audit || exit /b 0' // This will show known CVEs in the output
             }
         }
 
@@ -40,13 +40,13 @@ pipeline {
             steps {
                 script {
                     if (!fileExists('sonar-scanner-cli')) {
-                        sh '''
-                            curl -L -o sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.2.2.61219-linux.zip
-                            unzip -q sonar-scanner.zip -d ./
-                            rm sonar-scanner.zip
+                        bat '''
+                            curl -L -o sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.2.2.61219-windows.zip
+                            powershell -Command "Expand-Archive sonar-scanner.zip -DestinationPath ."
+                            del sonar-scanner.zip
                         '''
                     }
-                    sh './sonar-scanner-cli/sonar-scanner-5.2.2.61219-linux/bin/sonar-scanner -Dsonar.login=$SONAR_TOKEN'
+                    bat '.\\sonar-scanner-cli\\sonar-scanner-5.2.2.61219-windows\\bin\\sonar-scanner -Dsonar.login=%SONAR_TOKEN%'
                 }
             }
         }
